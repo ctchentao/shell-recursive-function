@@ -1,0 +1,54 @@
+#!/bin/bash
+# Program:
+#   this program shows the number of  files in this directory hidden files and general files
+# History
+# 2017/04/02 actorct 
+
+#declare -i i=0
+#export i=0
+i=0
+#j=0
+
+function judgeFile()
+{
+	
+	name=$(echo $1 | grep -v '^.')
+	if [ -n "$name" ]; then 
+		echo "0"
+	else echo "1"
+	fi
+}
+
+function listFiles()
+{
+	for file in `ls -a $1| grep -v '^\.\{1,2\}$'`
+	do 
+		if [ -d "$file"  ]; then
+#			if [ "$(judgeFile $file)" == "0" ]; then
+				i=$(($i+1))
+#			else j=$(($j+1))
+# 			fi
+			listFiles $1$file/
+		else
+			
+#			if [ "$(judgeFile $file)" == "0" ]; then
+				 i=$(($i+1))
+#			else j=$(($j+1))
+#			fi
+		fi
+	done
+}
+
+for file in `ls -a | grep -v '^\.\{1,2\}$'`
+do
+#	if [ "$(judgeFile $file)" == "0" ]; then
+		i=$(($i+1))
+#	else j=$(($j+1))
+#	fi
+	
+	if [ -d "$file" ]; then
+		listFiles ./$file/
+	fi	
+done
+#echo "the number of hidden files $j"
+echo "the number of general files $i"
